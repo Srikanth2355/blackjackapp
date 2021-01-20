@@ -14,8 +14,7 @@
 }
 
 .flex-box-container-1 div {
-    padding: 10px;
-    border: 1px solid black;
+    
     display: flex;
     align-items: center;
 }
