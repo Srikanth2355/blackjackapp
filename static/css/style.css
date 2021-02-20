@@ -26,7 +26,7 @@ body {
     padding: 10px;
     flex: 1;
     text-align: center;
-    height: 350px;
+    /* height: 350px; */
 }
 
 .flex-blackjack-row-2 div {
@@ -66,4 +66,9 @@ table, th, td {
 
 .flex-box-pick-color button {
     margin:5px;
+}
+
+#your-box img, #dealer-box img{
+    height: 100px;
+    padding: 10px;
 }

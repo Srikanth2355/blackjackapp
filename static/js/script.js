@@ -96,63 +96,119 @@ function rpsFrontEnd(humanImagechoice, botImagechoice, finalMessage) {
     var botdiv = document.createElement('div');
     var messagediv = document.createElement('div');
 
-    humandiv.innerHTML = "<img src='" +imageDatabase[humanImagechoice] + "' height=150 width=150 style='box-shadow:0px 10px 50px rgba(37, 50, 233, 1);'>"
-    messagediv.innerHTML = "<h1 style='color:"+ finalMessage['color'] +"; font-size:60px; padding:30px;'>"+ finalMessage['message'] + "</h1>";
-    botdiv.innerHTML = "<img src='" +imageDatabase[botImagechoice] + "' height=150 width=150 style='box-shadow:0px 10px 50px rgba(243, 38, 24, 1);'>"
-    
+    humandiv.innerHTML = "<img src='" + imageDatabase[humanImagechoice] + "' height=150 width=150 style='box-shadow:0px 10px 50px rgba(37, 50, 233, 1);'>"
+    messagediv.innerHTML = "<h1 style='color:" + finalMessage['color'] + "; font-size:60px; padding:30px;'>" + finalMessage['message'] + "</h1>";
+    botdiv.innerHTML = "<img src='" + imageDatabase[botImagechoice] + "' height=150 width=150 style='box-shadow:0px 10px 50px rgba(243, 38, 24, 1);'>"
+
     document.getElementById("flex-box-rps-div").appendChild(humandiv);
     document.getElementById("flex-box-rps-div").appendChild(messagediv);
     document.getElementById("flex-box-rps-div").appendChild(botdiv);
 }
 
-var all_buttons = document.getElementsByTagName("button"); 
+var all_buttons = document.getElementsByTagName("button");
 var copyAllButtons = [];
 
-for(let i=0; i<all_buttons.length;i++){
+for (let i = 0; i < all_buttons.length; i++) {
     copyAllButtons.push(all_buttons[i].classList[1]);
 }
 
-function buttonColorChange(buttonthingy){
-    if (buttonthingy.value === 'red'){
+function buttonColorChange(buttonthingy) {
+    if (buttonthingy.value === 'red') {
         buttonRed();
-    } else if(buttonthingy.value === 'green'){
+    } else if (buttonthingy.value === 'green') {
         buttonGreen();
-    } else if(buttonthingy.value === 'reset') {
+    } else if (buttonthingy.value === 'reset') {
         buttonColorreset();
-    } else if(buttonthingy.value === 'random'){
+    } else if (buttonthingy.value === 'random') {
         randomColors();
     }
 }
 
-function buttonRed(){
-    for(let i=0;i<all_buttons.length;i++){
+function buttonRed() {
+    for (let i = 0; i < all_buttons.length; i++) {
         all_buttons[i].classList.remove(all_buttons[i].classList[1]);
         all_buttons[i].classList.add('btn-danger');
 
     }
 }
 
-function buttonGreen(){
-    for(let i=0;i<all_buttons.length;i++){
+function buttonGreen() {
+    for (let i = 0; i < all_buttons.length; i++) {
         all_buttons[i].classList.remove(all_buttons[i].classList[1]);
         all_buttons[i].classList.add('btn-success');
 
     }
 }
 
-function buttonColorreset(){
-    for(let i=0;i<all_buttons.length;i++){
+function buttonColorreset() {
+    for (let i = 0; i < all_buttons.length; i++) {
         all_buttons[i].classList.remove(all_buttons[i].classList[1])
         all_buttons[i].classList.add(copyAllButtons[i])
     }
 }
 
-function randomColors(){
-    let choices= ['btn-danger','btn-success','btn-warning','btn-primary'];
+function randomColors() {
+    let choices = ['btn-danger', 'btn-success', 'btn-warning', 'btn-primary'];
 
-    for(let i=0;i<all_buttons.length;i++){
+    for (let i = 0; i < all_buttons.length; i++) {
         let randomNumber = Math.floor(Math.random() * 4);
         all_buttons[i].classList.remove(all_buttons[i].classList[1]);
         all_buttons[i].classList.add(choices[randomNumber]);
+    }
+}
+
+// challenge 5
+let blackjackGame = {
+    'you': {
+        'scoreSpan': '#your-blackjack-result',
+        'div': '#your-box',
+        'score': 0
+    },
+    'dealer': {
+        'scoreSpan': '#dealer-blackjack-result',
+        'div': '#dealer-box',
+        'score': 0
+    },
+
+    'cards': ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'K', 'Q', 'J', 'A'],
+
+}
+
+const YOU = blackjackGame['you'];
+const DEALER = blackjackGame['dealer'];
+
+const hitSound = new Audio('static/sounds/swish.m4a');
+
+document.querySelector("#blackjack-hit-button").addEventListener('click', blackjackhit);
+
+document.querySelector('#blackjack-deal-button').addEventListener('click', blackjackdeal);
+
+function blackjackhit() {
+    let card = randomcard();
+    showcard(card,YOU);
+}
+
+function randomcard() {
+    let randomindex = Math.floor(Math.random() * 13);
+    return blackjackGame['cards'][randomindex];
+}
+
+function showcard(card, activeplayer) {
+    let cardImage = document.createElement('img');
+    cardImage.src = `static/images/${card}.png`;
+    document.querySelector(activeplayer['div']).appendChild(cardImage);
+    hitSound.play();
+}
+
+function blackjackdeal() {
+    let yourimages = document.querySelector('#your-box').querySelectorAll('img');
+    let dealerimages = document.querySelector('#dealer-box').querySelectorAll('img');
+
+    for (i = 0; i < yourimages.length; i++) {
+        yourimages[i].remove();
+    }
+
+    for (i = 0; i < dealerimages.length; i++) {
+        dealerimages[i].remove();
     }
 }
