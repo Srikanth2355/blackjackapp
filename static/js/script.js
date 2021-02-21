@@ -162,15 +162,30 @@ let blackjackGame = {
     'you': {
         'scoreSpan': '#your-blackjack-result',
         'div': '#your-box',
-        'score': 0
+        'score': 0,
     },
     'dealer': {
         'scoreSpan': '#dealer-blackjack-result',
         'div': '#dealer-box',
-        'score': 0
+        'score': 0,
     },
 
     'cards': ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'K', 'Q', 'J', 'A'],
+    'cardsMap': {
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5,
+        '6': 6,
+        '7': 7,
+        '8': 8,
+        '9': 9,
+        '10': 10,
+        'K': 10,
+        'J': 10,
+        'Q': 10,
+        'A': [1, 11]
+    },
 
 }
 
@@ -185,7 +200,10 @@ document.querySelector('#blackjack-deal-button').addEventListener('click', black
 
 function blackjackhit() {
     let card = randomcard();
-    showcard(card,YOU);
+    showcard(card, YOU);
+    updatescore(card, YOU);
+    console.log(parseInt(YOU['score']));
+    showscore(YOU);
 }
 
 function randomcard() {
@@ -194,10 +212,12 @@ function randomcard() {
 }
 
 function showcard(card, activeplayer) {
-    let cardImage = document.createElement('img');
-    cardImage.src = `static/images/${card}.png`;
-    document.querySelector(activeplayer['div']).appendChild(cardImage);
-    hitSound.play();
+    if (activeplayer['score'] <= 21) {
+        hitSound.play();
+        let cardImage = document.createElement('img');
+        cardImage.src = `static/images/${card}.png`;
+        document.querySelector(activeplayer['div']).appendChild(cardImage);
+    }
 }
 
 function blackjackdeal() {
@@ -210,5 +230,37 @@ function blackjackdeal() {
 
     for (i = 0; i < dealerimages.length; i++) {
         dealerimages[i].remove();
+    }
+
+    YOU['score'] = 0;
+    DEALER['score'] = 0;
+    document.querySelector('#your-blackjack-result').textContent = 0;
+    document.querySelector('#your-blackjack-result').style.color = 'white';
+    document.querySelector('#dealer-blackjack-result').textContent = 0;
+    document.querySelector('#dealer-blackjack-result').style.color = 'white';
+
+
+
+}
+
+function updatescore(card, activeplayer) {
+    if (card === 'A') {
+        // if adding 11 keeps be below 21 then add 11 otherwise add 1
+        if (activeplayer['score'] + blackjackGame['cardsMap'][card][1] <= 21) {
+            activeplayer['score'] += blackjackGame['cardsMap'][card][1];
+        } else {
+            activeplayer['score'] += blackjackGame['cardsMap'][card][0];
+        }
+    } else {
+        activeplayer['score'] += blackjackGame['cardsMap'][card];
+    }
+}
+
+function showscore(activeplayer) {
+    if (activeplayer['score'] > 21) {
+        document.querySelector(activeplayer['scoreSpan']).textContent = 'BUST!';
+        document.querySelector(activeplayer['scoreSpan']).style.color = 'red';
+    } else {
+        document.querySelector(activeplayer['scoreSpan']).textContent = activeplayer['score'];
     }
 }
