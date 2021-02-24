@@ -72,3 +72,8 @@ table, th, td {
     height: 100px;
     padding: 10px;
 }
+
+#flex-cat-gen img {
+    width:150px;
+    height:150px;
+}
